@@ -558,7 +558,12 @@ int main()
             printf("error");
             break;
         }
-        printf("%c",c);
+        if (c==EOF)
+        {
+            printf("error");
+            break;
+        }
+        
     }
     deleteGraph_cmd(&head);
 }
