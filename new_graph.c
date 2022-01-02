@@ -5,12 +5,9 @@ int graph_size;
 
 void deleteGraph_cmd(pnode* head)
 {
-    if (!*head)
-    {
-        return;
-    }
+    
     pnode temp = *head;
-    while (temp)
+    while (!temp)
     {
         pnode free_node = temp;
         pedge temp_edge = temp->edges;
@@ -24,7 +21,8 @@ void deleteGraph_cmd(pnode* head)
         free(free_node);
         
     }
-    
+    graph_size = 0;
+    *head = NULL;
 }
 pnode get_node(pnode *head, int id)
 {
@@ -94,12 +92,12 @@ void add_edge(pnode src, pnode dest, int w)
 }
 char build_graph_cmd(pnode *head)
 {
-    if (head != NULL)
+    if (*head != NULL)
     {
         deleteGraph_cmd(head);
     }
     int id,dest_id,edge_val,num_of_node,i;
-    scanf(" %d",&num_of_node);
+    scanf("%d",&num_of_node);
     graph_size = num_of_node;
     for (i=0;i<num_of_node;i++)
     {
@@ -142,6 +140,7 @@ char build_graph_cmd(pnode *head)
 void printGraph_cmd(pnode head)
 {
     pnode nodes = head;
+    printf("next node id -%d\n",head->next->node_num);
     printf("graph:\n");
     while (nodes)
     {
@@ -356,10 +355,10 @@ void shortsPath_cmd(pnode head)
     scanf("%d %d",&src,&dest);
     if(mat[findid(src,find_id)][findid(dest,find_id)]==max)
     {
-        printf("Dijsktra shortest path: %d\n",-1);
+        printf("Dijsktra shortest path: %d \n",-1);
     }
     else
-        printf("Dijsktra shortest path: %d\n",mat[findid(src,find_id)][findid(dest,find_id)]);
+        printf("Dijsktra shortest path: %d \n",mat[findid(src,find_id)][findid(dest,find_id)]);
 }
 int get_id(int c, int **dist,int id)
 {
@@ -502,7 +501,7 @@ void TSP_cmd(pnode head)
     int ans = rec_tsp(c+1,cities,p,dist,0,c);
     if (ans == max)
     {
-        printf("TSP shortest path: %d\n",-1) ;
+        printf("TSP shortest path: %d \n",-1) ;
     }
     else
         printf("TSP shortest path: %d \n",ans);
