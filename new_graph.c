@@ -514,15 +514,10 @@ void TSP_cmd(pnode head)
 int main()
 {
     pnode head = NULL;
-    int flag = 1;
     char c,d;
     scanf(" %c",&c);
-    while ( flag)
+    while (c != EOF && c != '~')
     {
-        if (c==EOF)
-        {
-            flag = 0;
-        }
         d=' ';
         if(c=='A')
         {
@@ -560,8 +555,10 @@ int main()
         }
         if(d==EOF)
         {
+            printf("error");
             break;
         }
+        printf("%c",c);
     }
     deleteGraph_cmd(&head);
 }
