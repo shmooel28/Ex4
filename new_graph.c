@@ -119,7 +119,7 @@ char build_graph_cmd(pnode *head)
     //printf("if you want add edges for node, enter n\n");
     char c;
     scanf(" %c",&c);
-    while(c!='A'&&c!='B'&&c!='D'&&c!='S'&&c!='T')
+    while(c!='A'&&c!='B'&&c!='D'&&c!='S'&&c!='T'&&c!=EOF)
     {
         //printf("enter node id\n");
         scanf(" %c",&c);
@@ -160,25 +160,25 @@ void printGraph_cmd(pnode head)
 char insert_node_cmd(pnode *head)
 {
     char c;
-    //printf("pleas enter node id\n");
-    scanf(" %c",&c);
+    int id;
+    scanf(" %d",&id);
     pnode new_node = (pnode)malloc(sizeof(node));
-    new_node->node_num = c-'0';
-    if (get_node(head,c-'0')!=NULL)
+    new_node->node_num = id;
+    if (get_node(head,id)!=NULL)
     {
         pnode copy = *head;
-        pnode temp = get_node(head,c-'0');
+        pnode temp = get_node(head,id);
         if (temp->node_num == (*head)->node_num)
         {
             new_node->next = (*head)->next;
-            free(temp);
+            //free(temp);
             *head = new_node;
         }
         else
         {
             pnode copy = *head;
             pnode prev = *head;
-            while(prev->next && prev->next->node_num != c-'0')
+            while(prev->next && prev->next->node_num != id)
             {
                 prev = prev-> next;
                 copy = copy -> next;
@@ -208,7 +208,7 @@ char insert_node_cmd(pnode *head)
     }
     //printf("if you want add edges for node, enter dest\n");
     scanf(" %c",&c);
-    while (c!='A'&&c!='B'&&c!='D'&&c!='S'&&c!='T')
+    while (c!='A'&&c!='B'&&c!='D'&&c!='S'&&c!='T'&&c!=EOF)
     {
         pnode dest = get_node(head,c-'0');
         //printf("enter edge w\n");
@@ -256,12 +256,9 @@ void delete_node_cmd(pnode *head)
         pedge edge_copy = copy->edges;
         while (edge_copy)
         {
-            printf("dest-%d\n",edge_copy->endpoint->node_num);
             if (edge_copy->endpoint->node_num==id)
             {
-                printf("try\n");
                 remove_edge(&(copy->edges),edge_copy);
-                printf("yess\n");
             }
             edge_copy = edge_copy->next;
         }
@@ -357,7 +354,12 @@ void shortsPath_cmd(pnode head)
         
     }
     scanf("%d %d",&src,&dest);
-    printf("Dijsktra shortest path: %d\n",mat[findid(src,find_id)][findid(dest,find_id)]);
+    if(mat[findid(src,find_id)][findid(dest,find_id)]==max)
+    {
+        printf("Dijsktra shortest path: %d\n",-1);
+    }
+    else
+        printf("Dijsktra shortest path: %d\n",mat[findid(src,find_id)][findid(dest,find_id)]);
 }
 int get_id(int c, int **dist,int id)
 {
@@ -430,7 +432,6 @@ void TSP_cmd(pnode head)
     {
         find_id[i] = temp->node_num;
     }
-    
     int** mat =(int **)malloc(graph_size*sizeof(int *));
     for ( i = 0; i < graph_size; i++)
     {
@@ -493,9 +494,10 @@ void TSP_cmd(pnode head)
     {
         for (j=0; j<c; j++)
         {
-            dist[i+1][j+1]=mat[cities[i]][cities[j]];
+            dist[i+1][j+1]=mat[findid(cities[i],find_id)][findid(cities[j],find_id)];
         }
     }
+    
     int *p = (int *)malloc(c*sizeof(int));
     int ans = rec_tsp(c+1,cities,p,dist,0,c);
     if (ans == max)
@@ -512,28 +514,48 @@ void TSP_cmd(pnode head)
 int main()
 {
     pnode head = NULL;
-    char c;
-    while (scanf(" %c",&c) != EOF)
+    char c,d;
+    scanf(" %c",&c);
+    while ( c != EOF||c!='\n')
     {
+        d=' ';
         if(c=='A')
         {
-            c = build_graph_cmd(&head);
+            //printf("start new graph\n");
+            d = build_graph_cmd(&head);
         }
         if(c=='B')
         {
-            c = insert_node_cmd(&head);
+            //printf("add node\n");
+            d = insert_node_cmd(&head);
         }
         if(c=='D')
         {
+            //printf("delete node\n");
             delete_node_cmd(&head);
         }
         if(c=='S')
         {
+            //printf("short path\n");
             shortsPath_cmd(head);
         }
         if(c=='T')
         {
+            //printGraph_cmd(head);
+            //printf("travel problem\n");
             TSP_cmd(head);
+        }
+        if (d==' ')
+        {
+            scanf(" %c",&c);
+        }
+        else
+        {
+            c = d;
+        }
+        if(d==EOF)
+        {
+            break;
         }
     }
     deleteGraph_cmd(&head);
