@@ -504,8 +504,8 @@ void TSP_cmd(pnode head)
     {
         printf("TSP shortest path: %d\n",-1) ;
     }
-    
-    printf("TSP shortest path: %d \n",ans);
+    else
+        printf("TSP shortest path: %d \n",ans);
     
     
     
@@ -514,10 +514,15 @@ void TSP_cmd(pnode head)
 int main()
 {
     pnode head = NULL;
+    int flag = 1;
     char c,d;
     scanf(" %c",&c);
-    while ( c != EOF||c!='\n')
+    while ( flag)
     {
+        if (c==EOF)
+        {
+            flag = 0;
+        }
         d=' ';
         if(c=='A')
         {
