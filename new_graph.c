@@ -2,16 +2,15 @@
 #include<stdio.h>
 #include"GRAPH_.h"
 int graph_size;
-void free_edge(pedge head)
+void free_edge(pedge *head)
 {
-    pedge temp = head;
-    while (temp)
+    pedge *temp = head;
+    while (*temp)
     {
-        pedge free_edge = temp;
-        temp=temp->next;
+        pedge free_edge = *temp;
+        *temp=(*temp)->next;
         free(free_edge);
     }
-    //free(head);
 }
 void deleteGraph_cmd(pnode* head)
 {
@@ -160,13 +159,11 @@ void insert_node_cmd(pnode *head)
 {
     int id,dest_id,edge_val;
     scanf(" %d",&id);
-    //pnode new_node = (pnode)malloc(sizeof(node));
-    //new_node->node_num = id;
     pnode new_node;
     if (get_node(head,id)!=NULL)
     {
         pnode temp = get_node(head,id);
-        free_edge(temp->edges);
+        free_edge(&(temp->edges));
         if (temp->node_num == (*head)->node_num)
         {
             new_node = temp;
@@ -199,7 +196,6 @@ void insert_node_cmd(pnode *head)
             }
 
         }
-        //free(temp);
     }
     else
     {
@@ -248,7 +244,8 @@ void delete_node_cmd(pnode *head)
     int id;
     scanf("%d",&id);
     pnode temp = get_node(head,id);
-    free_edge(temp->edges);
+    free_edge(&(temp->edges));
+    //printGraph_cmd(*head);
     while (copy)
     {
         pedge edge_copy = copy->edges;
