@@ -79,7 +79,7 @@ void add_node(pnode *head,pnode n)
 }
 void add_edge(pnode src, pnode dest, int w)
 {
-    pedge h = src->edges;
+    pedge *h = &(src->edges);
     pedge e = (pedge)malloc(sizeof(edge));
     if (e==NULL)
     {
@@ -89,13 +89,13 @@ void add_edge(pnode src, pnode dest, int w)
     e->endpoint = dest;
     e->weight = w;
     e->next = NULL;
-    if(!h)
+    if(!*h)
     {
-        h = e;
-        src->edges=h;
+        *h = e;
+        src->edges=*h;
         return;
     }
-    pedge copy = h;
+    pedge copy = *h;
     while(copy->next)
     {
         copy = copy->next;
