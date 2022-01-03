@@ -228,7 +228,6 @@ void remove_edge(pedge *head,pedge *to_remove)
         copy = copy -> next;
     }
     if(!prev->next->next){
-        //prev->next = NULL;
         copy = copy->next;
         free(copy);
         prev->next = NULL;
@@ -249,26 +248,43 @@ void delete_node_cmd(pnode *head)
     //printGraph_cmd(*head);
     while (copy)
     {
-        pedge edge_copy = copy->edges;
-        /*if(edge_copy->endpoint->node_num == id)
+        if(copy->node_num != id && copy->edges)
         {
-            pedge edge_to_free = edge_copy;
-            edge_copy = edge_copy->next;
-            free(edge_to_free);
-        }*/
-        while (edge_copy)
-        {
-            if (edge_copy->endpoint->node_num==id)
+            if(copy->edges->endpoint->node_num != id)
             {
-                remove_edge(&(copy->edges),&(edge_copy));
-                //pedge edge_to_free = edge_copy; 
-                //edge_copy = edge_copy->next;
-                //free(edge_to_free);
-                //continue;
+                pedge edge_copy = copy->edges;
+                while (edge_copy->next)
+                {
+                    if (edge_copy->next->endpoint->node_num==id)
+                    {
+                        pedge remo_ed = edge_copy->next;
+                        edge_copy->next = edge_copy->next->next;
+                        free(remo_ed);
+                        break;
+                    }
+                    edge_copy = edge_copy->next;
+                }
             }
-            edge_copy = edge_copy->next;
+            else
+            {
+                if(copy->edges->next == NULL)
+                {
+                    pedge remo_edg = copy->edges;
+                    copy->edges = NULL;
+                    free(remo_edg);
+                }
+                else
+                {
+                    pedge remo_edg = copy->edges;
+                    copy->edges = remo_edg->next;
+                    free(remo_edg);
+                }
+            }
+                
         }
+        
         copy = copy->next;
+    
     }
     if (id == (*head)->node_num)
     {
