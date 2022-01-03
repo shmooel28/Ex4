@@ -597,7 +597,7 @@ int main()
         else if(c=='D')
         {
             //printf("delete node\n");
-            delete_node_cmd(&head);
+            //delete_node_cmd(&head);
         }
         else if(c=='S')
         {
