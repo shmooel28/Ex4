@@ -2,7 +2,17 @@
 #include<stdio.h>
 #include"GRAPH_.h"
 int graph_size;
-
+void free_edge(pedge head)
+{
+    pedge temp = head;
+    while (temp)
+    {
+        pedge free_edge = temp;
+        temp=temp->next;
+        free(free_edge);
+    }
+    //free(head);
+}
 void deleteGraph_cmd(pnode* head)
 {
     
@@ -150,13 +160,17 @@ void insert_node_cmd(pnode *head)
 {
     int id,dest_id,edge_val;
     scanf(" %d",&id);
-    pnode new_node = (pnode)malloc(sizeof(node));
-    new_node->node_num = id;
+    //pnode new_node = (pnode)malloc(sizeof(node));
+    //new_node->node_num = id;
+    pnode new_node;
     if (get_node(head,id)!=NULL)
     {
         pnode temp = get_node(head,id);
+        free_edge(temp->edges);
         if (temp->node_num == (*head)->node_num)
         {
+            new_node = temp;
+            new_node -> edges = NULL;
             new_node->next = (*head)->next;
             *head = new_node;
         }
@@ -171,20 +185,26 @@ void insert_node_cmd(pnode *head)
             }
             if(!prev->next->next)
             {
+                pnode new_node = prev->next;
+                new_node->edges = NULL;
                 prev->next = new_node;
             }
             else
             {
+                new_node = prev->next;
+                new_node->edges = NULL;
                 pnode *t = &(prev->next->next);
                 prev->next = new_node;
                 new_node->next = *t;
             }
 
         }
-        free(temp);
+        //free(temp);
     }
     else
     {
+        new_node = (pnode)malloc(sizeof(node));
+        new_node->node_num = id;
         add_node(head,new_node);
         graph_size += 1;
     }
@@ -228,6 +248,7 @@ void delete_node_cmd(pnode *head)
     int id;
     scanf("%d",&id);
     pnode temp = get_node(head,id);
+    free_edge(temp->edges);
     while (copy)
     {
         pedge edge_copy = copy->edges;
@@ -235,7 +256,8 @@ void delete_node_cmd(pnode *head)
         {
             if (edge_copy->endpoint->node_num==id)
             {
-                remove_edge(&(copy->edges),edge_copy);
+                //remove_edge(&(copy->edges),edge_copy);
+                
             }
             edge_copy = edge_copy->next;
         }
@@ -258,13 +280,13 @@ void delete_node_cmd(pnode *head)
     {
         prev->next = NULL;
         copy = copy->next;
-        free(copy);
+        free(temp);
         return;
     }
     copy = copy->next;
-    pnode t = copy;
+    //pnode t = copy;
     prev->next = prev->next->next;
-    free(t);
+    free(temp);
 }
 int findid(int index,int* arr)
 {
@@ -510,7 +532,7 @@ int main()
 {
     pnode head = NULL;
     char c = '\0';
-    while (scanf("%c", &c) != EOF)
+    while (scanf("%c", &c) != EOF && c!='~')
     {
         if(c=='A')
         {
