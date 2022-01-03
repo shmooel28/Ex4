@@ -293,9 +293,16 @@ void delete_node_cmd(pnode *head)
         free(temp);
         return;
     }
-    copy = *head;
+    //copy = *head;
     pnode prev = *head;
-    while(prev->next && prev->next->node_num != id)
+    while (prev->next->node_num != id)
+    {
+        prev = prev->next;
+    }
+    copy = prev->next;
+    prev->next = prev->next->next;
+    free(copy);
+    /*while(prev->next && prev->next->node_num != id)
     {
         prev = prev-> next;
         copy = copy -> next;
@@ -310,7 +317,7 @@ void delete_node_cmd(pnode *head)
     copy = copy->next;
     //pnode t = copy;
     prev->next = prev->next->next;
-    free(temp);
+    free(temp);*/
 }
 int findid(int index,int* arr)
 {
