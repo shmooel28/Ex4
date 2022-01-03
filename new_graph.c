@@ -92,24 +92,23 @@ void add_edge(pnode src, pnode dest, int w)
     }
     copy->next = e;
 }
-char build_graph_cmd(pnode *head)
+void build_graph_cmd(pnode *head)
 {
-    if (*head != NULL)
-    {
-        //deleteGraph_cmd(head);
-    }
 
-    int id,dest_id,edge_val,num_of_node,i;
-    scanf("%d",&num_of_node);
+    int id,src_id,dest_id,edge_val,num_of_node,i;
+    char c;
+    scanf("%d ",&num_of_node);
     graph_size = num_of_node;
     for (i=0;i<num_of_node;i++)
     {
+        //scanf(" %c",&c);
         pnode v = (pnode)malloc(sizeof(node));
         if (v==NULL)
         {
             printf("error");
-            return ' ';
+            return;
         }
+        //scanf("%d ",&id);
         v->node_num = i;
         pedge H = (pedge)malloc(sizeof(edge));
         H = NULL;
@@ -118,27 +117,30 @@ char build_graph_cmd(pnode *head)
     }
     //printGraph_cmd(*head);
     //printf("if you want add edges for node, enter n\n");
-    char c;
-    scanf(" %c",&c);
-    while(c!='A'&&c!='B'&&c!='D'&&c!='S'&&c!='T'&&c!=EOF)
-    {
-        //printf("enter node id\n");
-        scanf(" %c",&c);
-               
-        pnode src = get_node(head,c-'0');
+    //char c;
+    //scanf(" %c",&c);
+        //while(scanf("%d ",&src_id))
+        //{
+          //  pnode src = get_node(head,src_id);
         //printf("enter dest\n");
+        //while(c!='n'&&c!='A'&&c!='B'&&c!='D'&&c!='S'&&c!='T')
+    for (i=0; i<num_of_node;i++)    
+    {
         scanf(" %c",&c);
-        while(c!='n'&&c!='A'&&c!='B'&&c!='D'&&c!='S'&&c!='T')
+        scanf("%d ",&src_id);
+        pnode src = get_node(head,src_id);
+        while(scanf("%d ",&dest_id))
         {
-            pnode dest = get_node(head,c-'0');
+            pnode dest = get_node(head,dest_id);
             //printf("enter edge w\n");
-            scanf(" %c",&c);
-            add_edge(src,dest,c-'0');
+            scanf("%d ",&edge_val);
+            add_edge(src,dest,edge_val);
             //printf("for more edge, pleas enter dest, for more node enter n\n");
-            scanf(" %c",&c);
+            //scanf(" %c",&c);
         }
     }
-    return c;
+    
+    return ;
 }
 void printGraph_cmd(pnode head)
 {
@@ -159,10 +161,10 @@ void printGraph_cmd(pnode head)
     }
     
 }
-char insert_node_cmd(pnode *head)
+void insert_node_cmd(pnode *head)
 {
     char c;
-    int id;
+    int id,dest_id,edge_val;
     scanf(" %d",&id);
     pnode new_node = (pnode)malloc(sizeof(node));
     new_node->node_num = id;
@@ -173,7 +175,6 @@ char insert_node_cmd(pnode *head)
         if (temp->node_num == (*head)->node_num)
         {
             new_node->next = (*head)->next;
-            //free(temp);
             *head = new_node;
         }
         else
@@ -202,6 +203,7 @@ char insert_node_cmd(pnode *head)
             }
 
         }
+        free(temp);
     }
     else
     {
@@ -209,17 +211,18 @@ char insert_node_cmd(pnode *head)
         graph_size += 1;
     }
     //printf("if you want add edges for node, enter dest\n");
-    scanf(" %c",&c);
-    while (c!='A'&&c!='B'&&c!='D'&&c!='S'&&c!='T'&&c!=EOF)
+    //scanf(" %c",&c);
+    //while (c!='A'&&c!='B'&&c!='D'&&c!='S'&&c!='T'&&c!=EOF)
+    while (scanf("%d ",&dest_id))
     {
-        pnode dest = get_node(head,c-'0');
+        pnode dest = get_node(head,dest_id);
         //printf("enter edge w\n");
-        scanf(" %c",&c);
-        add_edge(new_node,dest,c-'0');
+        scanf("%d ",&edge_val);
+        add_edge(new_node,dest,edge_val);
         //printf("for more edge, pleas enter dest\n");
-        scanf(" %c",&c);
+        //scanf(" %c",&c);
     }
-    return c;
+    return ;
 }
 void remove_edge(pedge *head,pedge to_remove)
 {
@@ -545,31 +548,30 @@ int main()
             //printf("start new graph\n");
             if (head!=NULL)
             {
-                if(head->next!=NULL)
+                pnode temp = head;
+                while(temp)
                 {
-                    pnode temp = head->next;
-                    while(temp)
+                    pedge edge_temp = temp->edges;
+                    while (edge_temp)
                     {
-                        pedge edge_temp = temp->edges;
-                        while (edge_temp)
-                        {
-                            pedge edge_to_remove = edge_temp;
-                            edge_temp = edge_temp->next;
-                            free(edge_to_remove);
-                        }
-                        pnode node_to_remove = temp;
-                        temp = temp->next;
-                        free(node_to_remove);   
+                        pedge edge_to_remove = edge_temp;
+                        edge_temp = edge_temp->next;
+                        free(edge_to_remove);
                     }
+                    pnode node_to_remove = temp;
+                    temp = temp->next;
+                    free(node_to_remove);   
                 }
             }
+        
             head = NULL;
-            d = build_graph_cmd(&head);
+            build_graph_cmd(&head);
+            //printGraph_cmd(head);
         }
         if(c=='B')
         {
             //printf("add node\n");
-            d = insert_node_cmd(&head);
+            insert_node_cmd(&head);
         }
         if(c=='D')
         {
