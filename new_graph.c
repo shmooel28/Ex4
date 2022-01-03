@@ -542,7 +542,7 @@ int main()
     //scanf(" %c",&c);
     //while (c != EOF && c != '~')
     //while (scanf("%c ",&c)!=EOF)
-    for (;scanf("%c ",&c)!=EOF;)
+    for (;scanf("%c ",&c)!=EOF&&c != '\n';)
     {
         if(c=='A')
         {
