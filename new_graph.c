@@ -541,8 +541,8 @@ int main()
     char c;
     //scanf(" %c",&c);
     //while (c != EOF && c != '~')
-    while (scanf("%c",&c)!=EOF)
-    //for (;scanf("%c ",&c)!=EOF&&c != '\n';)
+    //while (scanf("%c",&c)!=EOF)
+    while ((c = getchar()) != EOF)
     {
         if(c=='A')
         {
@@ -588,14 +588,6 @@ int main()
             //printGraph_cmd(head);
             //printf("travel problem\n");
             TSP_cmd(head);
-        }
-        else
-        {
-            if(c!=' ' || c==EOF)
-            {
-                printf("%c",c);
-                break;
-            }
         }
     }
     deleteGraph_cmd(&head);
