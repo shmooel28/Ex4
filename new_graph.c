@@ -79,17 +79,27 @@ void add_node(pnode *head,pnode n)
 }
 void add_edge(pnode src, pnode dest, int w)
 {
-    pedge *h = &(src->edges);
-    pedge e = (pedge)malloc(sizeof(edge));
-    if (e==NULL)
+    if(!src->edges)
     {
-        printf("error");
+        src->edges = (pedge)malloc(sizeof(edge));
+        src->edges->next = NULL;
+        src->edges->weight = w;
+        src->edges->endpoint = dest;
         return;
     }
-    e->endpoint = dest;
-    e->weight = w;
-    e->next = NULL;
-    if(!*h)
+    else{
+    pedge h = (src->edges);
+    //pedge e = (pedge)malloc(sizeof(edge));
+    while (h->next)
+    {
+        h = h->next;
+    }
+    h->next = (pedge)malloc(sizeof(edge));
+    h->next->endpoint = dest;
+    h->next->weight = w;
+    h->next->next = NULL;
+    }
+    /*if(!*h)
     {
         *h = e;
         src->edges=*h;
@@ -100,7 +110,7 @@ void add_edge(pnode src, pnode dest, int w)
     {
         copy = copy->next;
     }
-    copy->next = e;
+    copy->next = e;*/
 }
 void build_graph_cmd(pnode *head)
 {
