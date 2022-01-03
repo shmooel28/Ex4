@@ -539,10 +539,11 @@ int main()
     pnode head = NULL;
     int flag=0;
     char c,d;
-    scanf(" %c",&c);
-    while (c != EOF && c != '~')
+    //scanf(" %c",&c);
+    //while (c != EOF && c != '~')
+    //while (scanf("%c ",&c)!=EOF)
+    for (;scanf("%c ",&c)!=EOF;)
     {
-        d=' ';
         if(c=='A')
         {
             //printf("start new graph\n");
@@ -589,40 +590,8 @@ int main()
             //printf("travel problem\n");
             TSP_cmd(head);
         }
-        if (d == ' ')
-        {
-            scanf(" %c",&c);
-        }
-        else
-        {
-            c = d;
-        }
-        if(d==EOF)
-        {
-            //printf("error");
-            break;
-        }
-        if (c==EOF)
-        {
-            printf("error");
-            break;
-        }
-        
+
     }
     deleteGraph_cmd(&head);
-    /*pnode temp = head;
-    while(temp)
-    {
-        pedge edge_temp = temp->edges;
-        while (edge_temp)
-        {
-            pedge edge_to_remove = edge_temp;
-            edge_temp = edge_temp->next;
-            free(edge_to_remove);
-        }
-        pnode node_to_remove = temp;
-        temp = temp->next;
-        free(node_to_remove);
-    }*/
     free(head);
 }
