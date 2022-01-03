@@ -7,7 +7,7 @@ void deleteGraph_cmd(pnode* head)
 {
     
     pnode temp = *head;
-    while (!temp)
+    while (temp)
     {
         pnode free_node = temp;
         pedge temp_edge = temp->edges;
@@ -94,8 +94,9 @@ char build_graph_cmd(pnode *head)
 {
     if (*head != NULL)
     {
-        deleteGraph_cmd(head);
+        //deleteGraph_cmd(head);
     }
+
     int id,dest_id,edge_val,num_of_node,i;
     scanf("%d",&num_of_node);
     graph_size = num_of_node;
@@ -359,6 +360,13 @@ void shortsPath_cmd(pnode head)
     }
     else
         printf("Dijsktra shortest path: %d \n",mat[findid(src,find_id)][findid(dest,find_id)]);
+    free(find_id);
+    for ( i = 0; i < graph_size; i++)
+    {
+        free(mat[i]);
+    }
+    free(mat);
+    
 }
 int get_id(int c, int **dist,int id)
 {
@@ -505,14 +513,26 @@ void TSP_cmd(pnode head)
     }
     else
         printf("TSP shortest path: %d \n",ans);
-    
-    
+    for (i =0; i<c+1;i ++)
+    {   
+        free(dist[i]);
+    }
+    free(dist);
+    for(i=0;i<graph_size;i++)
+    {
+        free(mat[i]);
+    }
+    free(mat);
+    free(p);
+    free(cities);
+    free(find_id);
     
 }
 
 int main()
 {
     pnode head = NULL;
+    int flag=0;
     char c,d;
     scanf(" %c",&c);
     while (c != EOF && c != '~')
@@ -521,6 +541,24 @@ int main()
         if(c=='A')
         {
             //printf("start new graph\n");
+            pnode temp = head;
+            head = NULL;
+            while(temp)
+            {
+                flag = 1;
+                pedge edge_temp = temp->edges;
+                while (edge_temp)
+                {
+                    pedge edge_to_remove = edge_temp;
+                    edge_temp = edge_temp->next;
+                    free(edge_to_remove);
+                }
+                pnode node_to_remove = temp;
+                temp = temp->next;
+                free(node_to_remove);   
+            }
+            //pnode 
+            //head = NULL;
             d = build_graph_cmd(&head);
         }
         if(c=='B')
@@ -544,7 +582,7 @@ int main()
             //printf("travel problem\n");
             TSP_cmd(head);
         }
-        if (d==' ')
+        if (d == ' ')
         {
             scanf(" %c",&c);
         }
@@ -554,7 +592,7 @@ int main()
         }
         if(d==EOF)
         {
-            printf("error");
+            //printf("error");
             break;
         }
         if (c==EOF)
@@ -565,4 +603,19 @@ int main()
         
     }
     deleteGraph_cmd(&head);
+    /*pnode temp = head;
+    while(temp)
+    {
+        pedge edge_temp = temp->edges;
+        while (edge_temp)
+        {
+            pedge edge_to_remove = edge_temp;
+            edge_temp = edge_temp->next;
+            free(edge_to_remove);
+        }
+        pnode node_to_remove = temp;
+        temp = temp->next;
+        free(node_to_remove);
+    }*/
+    free(head);
 }
