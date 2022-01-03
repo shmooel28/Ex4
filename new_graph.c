@@ -538,7 +538,7 @@ int main()
 {
     pnode head = NULL;
     int flag=0;
-    char c,d;
+    char c;
     //scanf(" %c",&c);
     //while (c != EOF && c != '~')
     while (scanf("%c",&c)!=EOF)
@@ -564,7 +564,6 @@ int main()
                     free(node_to_remove);   
                 }
             }
-        
             head = NULL;
             build_graph_cmd(&head);
             //printGraph_cmd(head);
