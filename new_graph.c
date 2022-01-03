@@ -17,6 +17,7 @@ void deleteGraph_cmd(pnode* head)
             temp_edge=temp_edge->next;
             free(free_edge);
         }
+        free(temp_edge);
         temp=temp->next;
         free(free_node);
         
@@ -95,35 +96,23 @@ void add_edge(pnode src, pnode dest, int w)
 void build_graph_cmd(pnode *head)
 {
 
-    int id,src_id,dest_id,edge_val,num_of_node,i;
+    int src_id,dest_id,edge_val,num_of_node,i;
     char c;
     scanf("%d ",&num_of_node);
     graph_size = num_of_node;
     for (i=0;i<num_of_node;i++)
     {
-        //scanf(" %c",&c);
         pnode v = (pnode)malloc(sizeof(node));
         if (v==NULL)
         {
             printf("error");
             return;
         }
-        //scanf("%d ",&id);
         v->node_num = i;
-        pedge H = (pedge)malloc(sizeof(edge));
-        H = NULL;
+        pedge H = NULL;
         v->edges = H;
         add_node(head,v);
     }
-    //printGraph_cmd(*head);
-    //printf("if you want add edges for node, enter n\n");
-    //char c;
-    //scanf(" %c",&c);
-        //while(scanf("%d ",&src_id))
-        //{
-          //  pnode src = get_node(head,src_id);
-        //printf("enter dest\n");
-        //while(c!='n'&&c!='A'&&c!='B'&&c!='D'&&c!='S'&&c!='T')
     for (i=0; i<num_of_node;i++)    
     {
         scanf(" %c",&c);
@@ -132,15 +121,11 @@ void build_graph_cmd(pnode *head)
         while(scanf("%d ",&dest_id))
         {
             pnode dest = get_node(head,dest_id);
-            //printf("enter edge w\n");
             scanf("%d ",&edge_val);
             add_edge(src,dest,edge_val);
-            //printf("for more edge, pleas enter dest, for more node enter n\n");
-            //scanf(" %c",&c);
         }
-    }
-    
-    return ;
+    }  
+    return;
 }
 void printGraph_cmd(pnode head)
 {
@@ -163,14 +148,12 @@ void printGraph_cmd(pnode head)
 }
 void insert_node_cmd(pnode *head)
 {
-    char c;
     int id,dest_id,edge_val;
     scanf(" %d",&id);
     pnode new_node = (pnode)malloc(sizeof(node));
     new_node->node_num = id;
     if (get_node(head,id)!=NULL)
     {
-        pnode copy = *head;
         pnode temp = get_node(head,id);
         if (temp->node_num == (*head)->node_num)
         {
@@ -189,17 +172,12 @@ void insert_node_cmd(pnode *head)
             if(!prev->next->next)
             {
                 prev->next = new_node;
-                //pnode t= copy->next;
-                //free(t);
             }
             else
             {
-                //pnode *old = &(prev->next);
                 pnode *t = &(prev->next->next);
                 prev->next = new_node;
                 new_node->next = *t;
-                //free(*old);
-                //free(temp);
             }
 
         }
@@ -210,17 +188,11 @@ void insert_node_cmd(pnode *head)
         add_node(head,new_node);
         graph_size += 1;
     }
-    //printf("if you want add edges for node, enter dest\n");
-    //scanf(" %c",&c);
-    //while (c!='A'&&c!='B'&&c!='D'&&c!='S'&&c!='T'&&c!=EOF)
     while (scanf("%d ",&dest_id))
     {
         pnode dest = get_node(head,dest_id);
-        //printf("enter edge w\n");
         scanf("%d ",&edge_val);
         add_edge(new_node,dest,edge_val);
-        //printf("for more edge, pleas enter dest\n");
-        //scanf(" %c",&c);
     }
     return ;
 }
@@ -435,8 +407,8 @@ int rec_tsp(int c,int *cities, int *p, int **dist, int start, int over)
 }
 void TSP_cmd(pnode head)
 {
-    int c,cost;
-    int src,dest,i,j,g;
+    int c;
+    int i,j,g;
     int max = 2000000;
     int *find_id = (int *)malloc(graph_size*sizeof(int));
     pnode temp = head;
@@ -537,11 +509,7 @@ void TSP_cmd(pnode head)
 int main()
 {
     pnode head = NULL;
-    int flag=0;
     char c = '\0';
-    //scanf(" %c",&c);
-    //while (c != EOF && c != '~')
-    //while (scanf("%c",&c)!=EOF)
     while (scanf("%c", &c) != EOF)
     {
         if(c=='A')
