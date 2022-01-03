@@ -56,6 +56,7 @@ void add_node(pnode *head,pnode n)
     if(!*head)
     {
         *head = n;
+        (*head)->next = NULL;
         return;
     }
     pnode copy = *head;
@@ -64,6 +65,7 @@ void add_node(pnode *head,pnode n)
         copy = copy->next;
     }
     copy->next = n;
+    n->next = NULL;
 }
 void add_edge(pnode src, pnode dest, int w)
 {
@@ -541,24 +543,27 @@ int main()
         if(c=='A')
         {
             //printf("start new graph\n");
-            pnode temp = head;
-            head = NULL;
-            while(temp)
+            if (head!=NULL)
             {
-                flag = 1;
-                pedge edge_temp = temp->edges;
-                while (edge_temp)
+                if(head->next!=NULL)
                 {
-                    pedge edge_to_remove = edge_temp;
-                    edge_temp = edge_temp->next;
-                    free(edge_to_remove);
+                    pnode temp = head->next;
+                    while(temp)
+                    {
+                        pedge edge_temp = temp->edges;
+                        while (edge_temp)
+                        {
+                            pedge edge_to_remove = edge_temp;
+                            edge_temp = edge_temp->next;
+                            free(edge_to_remove);
+                        }
+                        pnode node_to_remove = temp;
+                        temp = temp->next;
+                        free(node_to_remove);   
+                    }
                 }
-                pnode node_to_remove = temp;
-                temp = temp->next;
-                free(node_to_remove);   
             }
-            //pnode 
-            //head = NULL;
+            head = NULL;
             d = build_graph_cmd(&head);
         }
         if(c=='B')
