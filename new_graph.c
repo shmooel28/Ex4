@@ -569,28 +569,35 @@ int main()
             build_graph_cmd(&head);
             //printGraph_cmd(head);
         }
-        if(c=='B')
+        else if(c=='B')
         {
             //printf("add node\n");
             insert_node_cmd(&head);
         }
-        if(c=='D')
+        else if(c=='D')
         {
             //printf("delete node\n");
             delete_node_cmd(&head);
         }
-        if(c=='S')
+        else if(c=='S')
         {
             //printf("short path\n");
             shortsPath_cmd(head);
         }
-        if(c=='T')
+        else if(c=='T')
         {
             //printGraph_cmd(head);
             //printf("travel problem\n");
             TSP_cmd(head);
         }
-
+        else
+        {
+            if(c!=' ' || c==EOF)
+            {
+                printf("%c",c);
+                break;
+            }
+        }
     }
     deleteGraph_cmd(&head);
     free(head);
