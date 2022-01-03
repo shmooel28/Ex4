@@ -222,15 +222,16 @@ void remove_edge(pedge *head,pedge to_remove)
     }
     pedge copy = *head;
     pedge prev = *head;
-    while(prev->next&&prev->next->endpoint!=to_remove->endpoint)
+    while(prev->next&&prev->next->endpoint->node_num!=to_remove->endpoint->node_num)
     {
         prev = prev-> next;
         copy = copy -> next;
     }
     if(!prev->next->next){
-        prev->next = NULL;
+        //prev->next = NULL;
         copy = copy->next;
         free(copy);
+        prev->next = NULL;
         return;
     }
     prev->next = prev->next->next;
@@ -249,11 +250,21 @@ void delete_node_cmd(pnode *head)
     while (copy)
     {
         pedge edge_copy = copy->edges;
+        /*if(edge_copy->endpoint->node_num == id)
+        {
+            pedge edge_to_free = edge_copy;
+            edge_copy = edge_copy->next;
+            free(edge_to_free);
+        }*/
         while (edge_copy)
         {
             if (edge_copy->endpoint->node_num==id)
             {
-                remove_edge(&(copy->edges),edge_copy); 
+                remove_edge(&(copy->edges),edge_copy);
+                //pedge edge_to_free = edge_copy; 
+                //edge_copy = edge_copy->next;
+                //free(edge_to_free);
+                //continue;
             }
             edge_copy = edge_copy->next;
         }
