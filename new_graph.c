@@ -212,17 +212,17 @@ void insert_node_cmd(pnode *head)
     }
     return ;
 }
-void remove_edge(pedge *head,pedge to_remove)
+void remove_edge(pedge *head,pedge *to_remove)
 {
-    if ((*head)->endpoint->node_num==to_remove->endpoint->node_num)
+    if ((*head)->endpoint->node_num==(*to_remove)->endpoint->node_num)
     {
         *head = (*head)->next;
-        free(to_remove);
+        free(*to_remove);
         return;
     }
     pedge copy = *head;
     pedge prev = *head;
-    while(prev->next&&prev->next->endpoint->node_num!=to_remove->endpoint->node_num)
+    while(prev->next&&prev->next->endpoint->node_num!=(*to_remove)->endpoint->node_num)
     {
         prev = prev-> next;
         copy = copy -> next;
@@ -260,7 +260,7 @@ void delete_node_cmd(pnode *head)
         {
             if (edge_copy->endpoint->node_num==id)
             {
-                remove_edge(&(copy->edges),edge_copy);
+                remove_edge(&(copy->edges),&(edge_copy));
                 //pedge edge_to_free = edge_copy; 
                 //edge_copy = edge_copy->next;
                 //free(edge_to_free);
