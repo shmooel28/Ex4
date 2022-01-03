@@ -77,29 +77,19 @@ void add_node(pnode *head,pnode n)
     copy->next = n;
     n->next = NULL;
 }
-void add_edge(pnode src, pnode dest, int w)
+void add_edge(pnode src, node *dest, int w)
 {
-    if(!src->edges)
+    pedge *h = &(src->edges);
+    pedge e = (pedge)malloc(sizeof(edge));
+    if (e==NULL)
     {
-        src->edges = (pedge)malloc(sizeof(edge));
-        src->edges->next = NULL;
-        src->edges->weight = w;
-        src->edges->endpoint = dest;
+        printf("error");
         return;
     }
-    else{
-    pedge h = (src->edges);
-    //pedge e = (pedge)malloc(sizeof(edge));
-    while (h->next)
-    {
-        h = h->next;
-    }
-    h->next = (pedge)malloc(sizeof(edge));
-    h->next->endpoint = dest;
-    h->next->weight = w;
-    h->next->next = NULL;
-    }
-    /*if(!*h)
+    e->endpoint = &(*dest);
+    e->weight = w;
+    e->next = NULL;
+    if(!*h)
     {
         *h = e;
         src->edges=*h;
@@ -110,7 +100,7 @@ void add_edge(pnode src, pnode dest, int w)
     {
         copy = copy->next;
     }
-    copy->next = e;*/
+    copy->next = e;
 }
 void build_graph_cmd(pnode *head)
 {
@@ -139,7 +129,7 @@ void build_graph_cmd(pnode *head)
         pnode src = get_node(head,src_id);
         while(scanf("%d ",&dest_id))
         {
-            pnode dest = get_node(head,dest_id);
+            node *dest = get_node(head,dest_id);
             scanf("%d ",&edge_val);
             add_edge(src,dest,edge_val);
         }
@@ -211,12 +201,13 @@ void insert_node_cmd(pnode *head)
     {
         new_node = (pnode)malloc(sizeof(node));
         new_node->node_num = id;
+        new_node->edges=NULL;
         add_node(head,new_node);
         graph_size += 1;
     }
     while (scanf("%d ",&dest_id))
     {
-        pnode dest = get_node(head,dest_id);
+        node *dest = get_node(head,dest_id);
         scanf("%d ",&edge_val);
         add_edge(new_node,dest,edge_val);
     }
