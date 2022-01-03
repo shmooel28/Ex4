@@ -256,7 +256,7 @@ void delete_node_cmd(pnode *head)
         {
             if (edge_copy->endpoint->node_num==id)
             {
-                //remove_edge(&(copy->edges),edge_copy); 
+                remove_edge(&(copy->edges),edge_copy); 
             }
             edge_copy = edge_copy->next;
         }
