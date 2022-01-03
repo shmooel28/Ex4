@@ -538,11 +538,11 @@ int main()
 {
     pnode head = NULL;
     int flag=0;
-    char c;
+    char c = '\0';
     //scanf(" %c",&c);
     //while (c != EOF && c != '~')
     //while (scanf("%c",&c)!=EOF)
-    while ((c = getchar()) != EOF)
+    while (scanf("%c", &c) != EOF)
     {
         if(c=='A')
         {

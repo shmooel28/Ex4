@@ -9,6 +9,9 @@ def pars_input():
     submission_file = sys.argv[1]
     print(submission_file)
     f= open(submission_file,"r")
+    ids = None
+    commit = None
+    git_rep = None
     for line in f.readlines():
         if re.search(r'\.git', line):
             git_rep = line
@@ -30,9 +33,10 @@ def run_cmd(cmd , verbos = 1):
         if proc.returncode != 0:
            raise Exception(" failed p.returncode= " + str(proc.returncode))
     except Exception as inst:
-        print("command fained")
+        print("command failed")
         print(inst)
-        exit(1)
+        raise Exception(" failed p.returncode= " + str(proc.returncode))
+        
 
 
 def test_extra_compilation(target):
@@ -45,6 +49,14 @@ def test_extra_compilation(target):
         passed = 0
     run_cmd("rm compilation_out.txt" , 0)
     
+    
+def test_memory(prog , input_f ):
+    global passed
+    try:
+        run_cmd("valgrind --leak-check=full --error-exitcode=1 ./%s < %s > /dev/null"%(prog ,input_f ))
+    except Exception as inst:
+        print("valgrind failed on input %s"%(input_f) )
+        passed = 0
 
 def test_output_vs_expected(prog , input_f , expected_f):
     global passed
@@ -55,6 +67,18 @@ def test_output_vs_expected(prog , input_f , expected_f):
         run_cmd("cat tmp_out.txt")
         run_cmd("cat " + expected_f )
     run_cmd("rm tmp_out.txt" , 0)
+    
+def run_tests():
+    print("running tests")   
+
+    test_output_vs_expected("graph" , "../inputs/input1.txt" , "../outputs/output1.txt")
+    test_output_vs_expected("graph" , "../inputs/input2.txt" , "../outputs/output2.txt")
+    test_output_vs_expected("graph" , "../inputs/input3.txt" , "../outputs/output3.txt")
+    test_output_vs_expected("graph" , "../inputs/input4.txt" , "../outputs/output4.txt")
+    test_output_vs_expected("graph" , "../inputs/input5.txt" , "../outputs/output5.txt")
+    
+    test_memory("graph" , "../inputs/input1.txt" )
+    test_memory("graph" , "../inputs/input2.txt" )
 
 def main():
     git_rep , ids,  commit = pars_input()
@@ -82,15 +106,8 @@ def main():
     print("compiling with make all")
     run_cmd("make all")
 
-    print("running tests")
-    test_extra_compilation("all")
+    run_tests()
     
-    test_output_vs_expected("graph" , "../inputs/input1.txt" , "../outputs/output1.txt")
-    test_output_vs_expected("graph" , "../inputs/input2.txt" , "../outputs/output2.txt")
-    test_output_vs_expected("graph" , "../inputs/input3.txt" , "../outputs/output3.txt")
-    test_output_vs_expected("graph" , "../inputs/input4.txt" , "../outputs/output4.txt")
-    test_output_vs_expected("graph" , "../inputs/input5.txt" , "../outputs/output5.txt")
-
     if passed == 1:
         print("You have PASSED the initial checks.")
     else:
