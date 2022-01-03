@@ -541,8 +541,8 @@ int main()
     char c,d;
     //scanf(" %c",&c);
     //while (c != EOF && c != '~')
-    //while (scanf("%c ",&c)!=EOF)
-    for (;scanf("%c ",&c)!=EOF&&c != '\n';)
+    while (scanf("%c",&c)!=EOF)
+    //for (;scanf("%c ",&c)!=EOF&&c != '\n';)
     {
         if(c=='A')
         {
