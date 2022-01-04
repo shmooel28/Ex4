@@ -139,7 +139,7 @@ void build_graph_cmd(pnode *head)
 void printGraph_cmd(pnode head)
 {
     pnode nodes = head;
-    printf("next node id -%d\n",head->next->node_num);
+    printf("next node id :%d\n",head->next->node_num);
     printf("graph:\n");
     while (nodes)
     {
@@ -147,7 +147,7 @@ void printGraph_cmd(pnode head)
         pedge ed = nodes->edges;
         while (ed)
         {
-            printf("  dest- %d, w -%d  ",ed->endpoint->node_num,ed->weight);
+            printf("  dest- %d, w :%d  ",ed->endpoint->node_num,ed->weight);
             ed=ed->next;
         }
         printf("\n");
@@ -245,7 +245,7 @@ void delete_node_cmd(pnode *head)
     int id = -1;
     scanf("%d",&id);
     pnode temp = get_node(head,id);
-    free_edge(&(temp->edges));
+    //free_edge(&(temp->edges));
     //printGraph_cmd(*head);
     while (copy)
     {
@@ -290,6 +290,7 @@ void delete_node_cmd(pnode *head)
     if (id == (*head)->node_num)
     {
         *head = (*head)->next;
+        free_edge(&(temp->edges));
         free(temp);
         return;
     }
@@ -301,7 +302,8 @@ void delete_node_cmd(pnode *head)
     }
     copy = prev->next;
     prev->next = prev->next->next;
-    free(copy);
+    free_edge(&(temp->edges));
+    free(temp);
     /*while(prev->next && prev->next->node_num != id)
     {
         prev = prev-> next;
@@ -609,6 +611,10 @@ int main()
             //printGraph_cmd(head);
             //printf("travel problem\n");
             TSP_cmd(head);
+        }
+        else if(c=='P')
+        {
+            printGraph_cmd(head);
         }
     }
     deleteGraph_cmd(&head);
