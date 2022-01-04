@@ -242,11 +242,9 @@ void delete_node_cmd(pnode *head)
 {
     graph_size -= 1;
     pnode copy = *head;
-    int id = -1;
+    int id = 0;
     scanf("%d",&id);
     pnode temp = get_node(head,id);
-    //free_edge(&(temp->edges));
-    //printGraph_cmd(*head);
     while (copy)
     {
         if(copy->node_num != id && copy->edges)
