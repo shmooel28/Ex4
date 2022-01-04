@@ -213,31 +213,6 @@ void insert_node_cmd(pnode *head)
     }
     return ;
 }
-void remove_edge(pedge *head,pedge *to_remove)
-{
-    if ((*head)->endpoint->node_num==(*to_remove)->endpoint->node_num)
-    {
-        *head = (*head)->next;
-        free(*to_remove);
-        return;
-    }
-    pedge copy = *head;
-    pedge prev = *head;
-    while(prev->next&&prev->next->endpoint->node_num!=(*to_remove)->endpoint->node_num)
-    {
-        prev = prev-> next;
-        copy = copy -> next;
-    }
-    if(!prev->next->next){
-        copy = copy->next;
-        free(copy);
-        prev->next = NULL;
-        return;
-    }
-    prev->next = prev->next->next;
-    copy = copy->next;
-    free(copy);
-}
 void delete_node_cmd(pnode *head)
 {
     graph_size -= 1;
@@ -292,32 +267,14 @@ void delete_node_cmd(pnode *head)
         free(temp);
         return;
     }
-    //copy = *head;
     pnode prev = *head;
     while (prev->next->node_num != id)
     {
         prev = prev->next;
     }
-    copy = prev->next;
     prev->next = prev->next->next;
     free_edge(&(temp->edges));
     free(temp);
-    /*while(prev->next && prev->next->node_num != id)
-    {
-        prev = prev-> next;
-        copy = copy -> next;
-    }
-    if(!prev->next->next)
-    {
-        prev->next = NULL;
-        copy = copy->next;
-        free(temp);
-        return;
-    }
-    copy = copy->next;
-    //pnode t = copy;
-    prev->next = prev->next->next;
-    free(temp);*/
 }
 int findid(int index,int* arr)
 {
@@ -563,7 +520,7 @@ int main()
 {
     pnode head = NULL;
     char c = '\0';
-    while (scanf("%c", &c) != EOF && c!='~')
+    while (scanf("%c", &c) != EOF)
     {
         if(c=='A')
         {
@@ -596,23 +553,15 @@ int main()
         }
         else if(c=='D')
         {
-            //printf("delete node\n");
             delete_node_cmd(&head);
         }
         else if(c=='S')
         {
-            //printf("short path\n");
             shortsPath_cmd(head);
         }
         else if(c=='T')
         {
-            //printGraph_cmd(head);
-            //printf("travel problem\n");
             TSP_cmd(head);
-        }
-        else if(c=='P')
-        {
-            printGraph_cmd(head);
         }
     }
     deleteGraph_cmd(&head);
